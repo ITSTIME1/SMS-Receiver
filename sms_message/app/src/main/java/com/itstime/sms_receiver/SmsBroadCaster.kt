@@ -19,8 +19,9 @@ class SmsBroadCaster : BroadcastReceiver() {
         if (intent?.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             val extract = Telephony.Sms.Intents.getMessagesFromIntent(intent)
             Log.d(TAG + "body", extract.toString())
-            extract.forEach { smsMessage -> Log.d(TAG + "message body", smsMessage.messageBody) }
-        Toast.makeText(context, "sms 받았어요", Toast.LENGTH_LONG).show()
+            extract.forEach { smsMessage ->
+                Log.d(TAG + "message body", smsMessage.messageBody)
+                Toast.makeText(context, smsMessage.messageBody, Toast.LENGTH_LONG).show()}
         }
     }
 }
