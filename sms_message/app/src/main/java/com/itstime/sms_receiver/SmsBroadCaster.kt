@@ -4,24 +4,34 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.provider.Telephony
-import android.telephony.SmsMessage
 import android.util.Log
 import android.widget.Toast
 import java.util.*
 
 private const val TAG = "SmsBroadCastReceiver"
 class SmsBroadCaster : BroadcastReceiver() {
-
+    private val axa : String = "AXA"
+    // 092924 [AXA보험입니다.]
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             val extract = Telephony.Sms.Intents.getMessagesFromIntent(intent)
-            Log.d(TAG + "body", extract.toString())
+            var certifiNum : String? = null
             extract.forEach { smsMessage ->
-                Log.d(TAG + "message body", smsMessage.messageBody)
-                Toast.makeText(context, smsMessage.messageBody, Toast.LENGTH_LONG).show()}
+                certifiNum  = smsMessage.messageBody.toString()
+                // axa 라는 단어가포함 되어 있다면
+                if (certifiNum!!.contains(axa)) {
+                    val intent = Intent(context, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra("certifinum", certifiNum.toString())
+                    Toast.makeText(context, certifiNum, Toast.LENGTH_LONG).show()
+
+                    context?.startActivity(intent)
+                } else {
+                    Log.d(TAG + "포함 안되어 있음", "")
+                }}
         }
+
     }
 }
