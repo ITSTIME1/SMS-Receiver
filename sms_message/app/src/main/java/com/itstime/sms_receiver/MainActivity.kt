@@ -76,30 +76,30 @@ class MainActivity : AppCompatActivity() {
             val inputText: TextView = findViewById(R.id.phone_number_input)
             inputText.text = number
             showText.text = data.toString()
+//
+//            Toast.makeText(this, "성공적으로 반영", Toast.LENGTH_LONG).show()
 
-            Toast.makeText(this, "성공적으로 반영", Toast.LENGTH_LONG).show()
-
-            try {
-                sendSMS(number, data.toString())
-            } catch (e: Exception) {
-                // on catch block we are displaying toast message for error.
-                Log.d(TAG, e.toString())
-                Toast.makeText(
-                    applicationContext,
-                    "Please enter all the data.." + e.message.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+//            try {
+//                sendSMS(number, data.toString())
+//            } catch (e: Exception) {
+//                // on catch block we are displaying toast message for error.
+//                Log.d(TAG, e.toString())
+//                Toast.makeText(
+//                    applicationContext,
+//                    "Please enter all the data.." + e.message.toString(),
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
         }
     }
 
 
 
 
-    // send sms 왜 안보내지지
-    @SuppressLint("UnspecifiedImmutableFlag")
-    private fun sendSMS(number: String, message: String) {
-        val sentPI: PendingIntent = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"), PendingIntent.FLAG_IMMUTABLE)
-        SmsManager.getDefault().sendTextMessage(number, null, message, sentPI, null)
-    }
+//    // send sms 왜 안보내지지
+//    @SuppressLint("UnspecifiedImmutableFlag")
+//    private fun sendSMS(number: String, message: String) {
+//        val sentPI: PendingIntent = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"), PendingIntent.FLAG_IMMUTABLE)
+//        SmsManager.getDefault().sendTextMessage(number, null, message, sentPI, null)
+//    }
 }
