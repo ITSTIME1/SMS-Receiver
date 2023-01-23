@@ -30,6 +30,12 @@ class SmsBroadCaster : BroadcastReceiver() {
                     context?.startActivity(intent)
                 } else {
                     Log.d(TAG + "포함 안되어 있음", "")
+                    val intent = Intent(context, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra("certifinum", certifiNum.toString())
+                    Toast.makeText(context, certifiNum, Toast.LENGTH_LONG).show()
+
+                    context?.startActivity(intent)
                 }}
         }
 
