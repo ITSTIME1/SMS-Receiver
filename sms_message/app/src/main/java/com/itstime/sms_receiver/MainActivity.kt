@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 sendSMS(number, data.toString())
             } catch (e: Exception) {
                 // on catch block we are displaying toast message for error.
+                Log.d(TAG, e.toString())
                 Toast.makeText(
                     applicationContext,
                     "Please enter all the data.." + e.message.toString(),
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     // send sms 왜 안보내지지
     @SuppressLint("UnspecifiedImmutableFlag")
     private fun sendSMS(number: String, message: String) {
-        val sentPI: PendingIntent = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"), 0)
+        val sentPI: PendingIntent = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"), PendingIntent.FLAG_IMMUTABLE)
         SmsManager.getDefault().sendTextMessage(number, null, message, sentPI, null)
     }
 }
