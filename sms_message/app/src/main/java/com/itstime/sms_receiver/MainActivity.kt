@@ -2,22 +2,17 @@ package com.itstime.sms_receiver
 
 import android.Manifest.permission.RECEIVE_SMS
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.provider.Telephony
-import android.telephony.SmsManager
 import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.material.textfield.TextInputEditText
 
 
 // This Project is for getting sms message
@@ -26,18 +21,19 @@ import com.google.android.material.textfield.TextInputEditText
 // you know below step.
 
 // 1. you have to install this app.
-// 2. Input specify number ( to - to )
-
+// 2. Input specify number ( to - to
+// )
 private const val TAG = "SmsBroadCastReceiver"
+private const val REQUEST_CODE_SMS_PERMISSION = 1;
+private const val PHONE_NUMBER : String = "010-9775-4185"
+
 class MainActivity : AppCompatActivity() {
-
-    private val REQUEST_CODE_SMS_PERMISSION = 1;
-    private val number : String = "010-9775-4185"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // broadcast register
         initial()
+        // permission
         requestSmsPermission()
         val intent = intent
         onNewIntent(intent)
@@ -71,10 +67,11 @@ class MainActivity : AppCompatActivity() {
         val data = intent?.getStringExtra("certifinum")
         // 성공적으로 가지고 온다.
         Log.d("data+set", data.toString())
+        // 데이터가 존재하면 표시
         if (data != null) {
             val showText: TextView = findViewById(R.id.message_id)
             val inputText: TextView = findViewById(R.id.phone_number_input)
-            inputText.text = number
+            inputText.text = PHONE_NUMBER
             showText.text = data.toString()
 //
 //            Toast.makeText(this, "성공적으로 반영", Toast.LENGTH_LONG).show()
