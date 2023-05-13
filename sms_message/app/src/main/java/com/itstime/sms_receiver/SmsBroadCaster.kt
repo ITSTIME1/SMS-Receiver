@@ -21,26 +21,10 @@ class SmsBroadCaster : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context?, intent: Intent?) {
         // auto-completed
-        if(intent?.action.equals("android.intent.action.BOOT_COMPLETED")) {
-            // version Q 이상이라면
-            // version Q 이상이라면 자동적으로 실행 가능하도록 만듬 되나?
+        if(intent?.action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+            startService(context!!);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // 되네
                 Log.d("Q버전이상", "success");
-                val i = Intent(context, MainActivity::class.java)
-                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                val pendingIntent =
-                    PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-                try {
-                    pendingIntent.send()
-                } catch (e: CanceledException) {
-                    e.printStackTrace()
-                }
-            } else {
-                Log.d("Q버전미만", "success");
-                val boot_intent = Intent(context, MainActivity::class.java);
-                boot_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context?.startActivity(boot_intent);
             }
         }
 
@@ -73,5 +57,16 @@ class SmsBroadCaster : BroadcastReceiver() {
         val sentPI: PendingIntent = PendingIntent.getBroadcast(context, 0, Intent("SMS_SENT"), PendingIntent.FLAG_IMMUTABLE)
         SmsManager.getDefault().sendTextMessage(number, null, message, sentPI, null)
         Toast.makeText(context, "태선이한테 보냈음", Toast.LENGTH_LONG).show()
+    }
+
+
+    // start service android api 13
+    private fun startService(context: Context){
+        val appIntent = Intent(context, SmsService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            context.startForegroundService(appIntent)
+        } else {
+            context.startService(appIntent)
+        }
     }
 }
