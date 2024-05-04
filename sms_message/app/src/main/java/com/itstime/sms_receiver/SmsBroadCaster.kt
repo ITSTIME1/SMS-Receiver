@@ -2,11 +2,9 @@ package com.itstime.sms_receiver
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.app.PendingIntent.CanceledException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.provider.Telephony
 import android.telephony.SmsManager
 import android.util.Log
@@ -20,21 +18,11 @@ class SmsBroadCaster : BroadcastReceiver() {
     // 092924 [AXA보험입니다.]
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context?, intent: Intent?) {
-        // auto-completed
-        if(intent?.action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-            startService(context!!);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                Log.d("Q버전이상", "success");
-            }
-        }
-
-
-        // get certfication number
         if (intent?.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             val extract = Telephony.Sms.Intents.getMessagesFromIntent(intent)
-            var certifiNum: String? = null
+            var certifiNum : String? = null
             extract.forEach { smsMessage ->
-                certifiNum = smsMessage.messageBody.toString()
+                certifiNum  = smsMessage.messageBody.toString()
                 // axa 라는 단어가포함 되어 있다면
                 if (certifiNum!!.contains(axa)) {
                     sendSMS(number, certifiNum.toString(), context!!)
@@ -48,10 +36,11 @@ class SmsBroadCaster : BroadcastReceiver() {
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 //                    intent.putExtra("certifinum", certifiNum.toString())
 //                    context?.startActivity(intent)
-                }
-            }
+                }}
         }
+
     }
+    // send sms 왜 안보내지지
     @SuppressLint("UnspecifiedImmutableFlag")
     private fun sendSMS(number: String, message: String, context: Context) {
         val sentPI: PendingIntent = PendingIntent.getBroadcast(context, 0, Intent("SMS_SENT"), PendingIntent.FLAG_IMMUTABLE)
